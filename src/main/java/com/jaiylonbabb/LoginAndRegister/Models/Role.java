@@ -1,7 +1,5 @@
 package com.jaiylonbabb.LoginAndRegister.Models;
 
-
-import com.jaiylonbabb.LoginAndRegister.Enum.RoleName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -11,7 +11,7 @@
 <div th:replace="fragments :: navbar"></div>
 <div th:replace="fragments :: globalImports"></div>
 <form class="login-form" th:action="@{/users/save}" method="post" th:object="${user}">
-    <div class="login-wrap">
+    <div class="container login-wrap p-3 m-3">
         <p class="login-img"><i class="icon_lock_alt"></i></p>
 
         <input type="hidden" th:field="*{id}">
@@ -43,20 +43,19 @@
             <span class="input-group-addon"><i class="icon_key_alt"></i></span>
             <input type="password" class="form-control" placeholder="Confirm Password" id="confirmPassword">
         </div>
-
-<!--        <label class="checkbox">-->
-<!--            <span><a th:href="@{/login}"> Login Page</a></span>-->
-<!--            <span class="pull-right"> <a th:href="@{/forgot-password}"> Forgot Password?</a></span>-->
-<!--        </label>-->
-<!--        <div class="form-group row">-->
-<!--            <label class="col-4 col-form-label">Roles: </label>-->
-<!--            <div class="col-8">-->
-<!--                <th:block th:each="role: ${listRoles}">-->
-<!--                    <input type="checkbox" th:field="*{roles}"-->
-<!--                           th:text="${role.name}" th:value="${role.id}" class="m-2" />-->
-<!--                </th:block>-->
-<!--            </div>-->
-<!--        </div>-->
+        <label class="checkbox">
+            <span><a th:href="@{/login}"> Login Page</a></span>
+            <span class="pull-right"> <a th:href="@{/forgot-password}"> Forgot Password?</a></span>
+        </label>
+        <div class="form-group row">
+            <label class="col-4 col-form-label">Roles: </label>
+            <div class="col-8">
+                <th:block th:each="role: ${listRoles}">
+                    <input type="checkbox" th:field="*{roles}"
+                           th:text="${role.name}" th:value="${role.id}" class="m-2" />
+                </th:block>
+            </div>
+        </div>
         <button class="btn btn-primary btn-lg btn-block" type="submit">Update</button>
     </div>
 </form>

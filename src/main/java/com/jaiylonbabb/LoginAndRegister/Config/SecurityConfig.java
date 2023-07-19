@@ -1,11 +1,13 @@
 package com.jaiylonbabb.LoginAndRegister.Config;
 
+import com.jaiylonbabb.LoginAndRegister.Implementation.UserDetailsServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,25 +21,27 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsServiceImpl();
+    }
 
-    @Resource
-//    private CustomWebAuthenticationDetailsSource authenticationDetailsSource;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
-                .csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/login", "/resources/**", "/css/**", "/fonts/**", "/img/**").permitAll()
-                .requestMatchers("/register").permitAll()
-                .requestMatchers("/resources/**", "/css/**", "/fonts/**", "/img/**", "/js/**").permitAll()
-                .requestMatchers("/users/addNew").permitAll()
-//                .requestMatchers("/users").hasAnyAuthority("Admin")
-                .anyRequest().authenticated()
+                    .requestMatchers("index.html").permitAll()
+                    .requestMatchers("/login", "/resources/**", "/css/**", "/fonts/**", "/img/**").permitAll()
+                    .requestMatchers("/register").permitAll()
+                    .requestMatchers("/resources/**", "/css/**", "/fonts/**", "/img/**", "/js/**").permitAll()
+                    .requestMatchers("/users/addNew").permitAll()
+                    .requestMatchers("/user/edit/**").hasRole("Admin")
+                    .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedPage("/accessDenied")
                 .and()
-                .formLogin().defaultSuccessUrl("/home").permitAll()
-//                .authenticationDetailsSource(authenticationDetailsSource)
+                .formLogin().loginPage("/login")
+                .permitAll()
                 .and()
                 .logout().logoutUrl("/logout");
         return http.build();
@@ -53,19 +57,20 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-
-        provider.setUserDetailsService(userDetailsService);
-
+        provider.setUserDetailsService(userDetailsService());
         provider.setPasswordEncoder(bCryptPasswordEncoder());
 
         return provider;
+    }
+
+//    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
     }
 }

@@ -4,23 +4,35 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
-public class UserPrincipal implements UserDetails {
+public class MyUserDetails implements UserDetails {
 
     private User user;
 
-    public UserPrincipal(User user) {
+    public MyUserDetails(User user) {
         this.user = user;
     }
+
+    public String getFullName() {
+        return this.user.getFirstname();
+    }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return Collections.singleton(new SimpleGrantedAuthority("User"));
+////        line 20 should be "USER" if I run into errors
+//    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
-//        line 20 should be "USER" if I run into errors
-//        ROLE_USER.name()
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for(Role role: user.getRoles()){
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+//        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+        return authorities;
     }
-
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -28,7 +40,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return user.getUsername();
     }
 
     @Override

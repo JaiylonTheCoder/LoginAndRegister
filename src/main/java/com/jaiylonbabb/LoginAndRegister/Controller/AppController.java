@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AppController {
 
-    @GetMapping("/index")
+    @GetMapping("/")
     public String goHome() {
         return "index";
     }
@@ -16,11 +16,6 @@ public class AppController {
     public String login() {
         return "login";
     }
-
-//    @GetMapping("/create_role_form")
-//    public String createRoleForm() {
-//        return "create_role_form";
-//    }
 
 //    @GetMapping("/error")
 //    public String errorPage(){

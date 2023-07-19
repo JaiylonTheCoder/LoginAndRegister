@@ -6,6 +6,10 @@ import com.jaiylonbabb.LoginAndRegister.Models.*;
 import com.jaiylonbabb.LoginAndRegister.Repository.RoleRepository;
 import com.jaiylonbabb.LoginAndRegister.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +36,12 @@ public class UserService {
     }
 
     //Delete User
-    public void delete(Long id) {
+//    public void deleteById(Long id) {
+//        userRepository.deleteById(id);
+//    }
+    public String deleteUser(Long id) {
         userRepository.deleteById(id);
+        return "user deleted !! " + id;
     }
 
 //    @Override
@@ -63,6 +71,15 @@ public class UserService {
     }
 
     public void saveEdit(User user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
+    }
+
+    public Page<User> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return this.userRepository.findAll(pageable);
     }
 }

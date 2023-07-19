@@ -1,25 +1,23 @@
-package com.jaiylonbabb.LoginAndRegister.Service;
+package com.jaiylonbabb.LoginAndRegister.Implementation;
 
+import com.jaiylonbabb.LoginAndRegister.Models.MyUserDetails;
+import com.jaiylonbabb.LoginAndRegister.Models.User;
 import com.jaiylonbabb.LoginAndRegister.Repository.UserRepository;
-import com.jaiylonbabb.LoginAndRegister.Models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class CustomUserDetailService implements UserDetailsService {
-
+public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    UserRepository userRepository;
-
+    private UserRepository userRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.getUserByUsername(username);
 
-        if(user == null) {
-            throw new UsernameNotFoundException("User not found!");
+        if (user == null) {
+            throw new UsernameNotFoundException("Could not find user");
         }
 
         return new MyUserDetails(user);

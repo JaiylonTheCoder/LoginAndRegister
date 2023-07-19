@@ -1,6 +1,5 @@
 package com.jaiylonbabb.LoginAndRegister.Repository;
 
-import com.jaiylonbabb.LoginAndRegister.Enum.RoleName;
 import com.jaiylonbabb.LoginAndRegister.Models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
